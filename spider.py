@@ -9,8 +9,6 @@ month = now.month
 day = now.day
 
 validHrefs = []
-num = 0
-
 
 def getTarget(target):
     res = requests.get(url=target)
@@ -97,9 +95,9 @@ if __name__ == "__main__":
         getTarget(target)
         print("sleeping...")
         if i % 10 == 0:
-            time.sleep(300)
+            time.sleep(100)
         else:
-            time.sleep(60)
+            time.sleep(30)
 
     fileName = "{0}.{1}.{2}.html".format(year, month, day)
     changeScale(fileName)
