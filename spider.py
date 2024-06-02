@@ -10,6 +10,7 @@ day = now.day
 
 validHrefs = []
 
+
 def getTarget(target):
     res = requests.get(url=target)
     if res.status_code == 200:
@@ -46,7 +47,10 @@ def getPage(page):
             urls = target.find_all("a")
             for url in urls:
                 href = url["href"]
-                if href.startswith("htm_data/2405"):
+                m = month if month >= 10 else "0{0}".format(month)
+                y = year % 100
+                start = "htm_data/{0}{1}".format(y, m)
+                if href.startswith(start):
                     validHrefs.append(href)
 
 
