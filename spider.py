@@ -48,6 +48,7 @@ def getPage(page):
             for url in urls:
                 href = url["href"]
                 m = month if month >= 10 else "0{0}".format(month)
+                m = "07"
                 y = year % 100
                 start = "htm_data/{0}{1}".format(y, m)
                 if href.startswith(start):
@@ -104,4 +105,4 @@ if __name__ == "__main__":
             time.sleep(30)
 
     fileName = "{0}.{1}.{2}.html".format(year, month, day)
-    changeScale(fileName)
+    # changeScale(fileName)
