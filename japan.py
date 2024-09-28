@@ -2,6 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import subprocess
 import time
+import os
+import re
+import sys
 
 
 def get_magnet_link(code):
@@ -42,5 +45,34 @@ def main():
         time.sleep(30)  # 为了避免请求过于频繁
 
 
+def getDesc(folder_path):
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".mp4"):
+            match = re.search(r"([A-Za-z]+-\d+)", filename)
+            if match:
+                code = match.group(1)
+                search_url = f"https://tokyolib.com/search?type=id&q={code}"
+                response = requests.get(search_url)
+                soup = BeautifulSoup(response.content, "html.parser")
+
+                work_title = soup.find("h4", class_="work-title")
+                if work_title:
+                    desc = work_title.text.replace(" ", "")
+                    new_filename = f"{code}_{desc}.mp4"
+                    old_path = os.path.join(folder_path, filename)
+                    new_path = os.path.join(folder_path, new_filename)
+                    os.rename(old_path, new_path)
+                    print(f"Renamed: {filename} -> {new_filename}")
+                else:
+                    print(f"No description found for {filename}")
+                time.sleep(30)
+            else:
+                print(f"No valid code found in {filename}")
+
+
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1:
+        folder_path = sys.argv[1]
+        getDesc(folder_path)
+    else:
+        main()
