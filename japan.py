@@ -46,8 +46,22 @@ def main():
 
 
 def getDesc(folder_path):
+    excluded = {"OFJE-264.HD"}
+    for f in os.listdir(folder_path):
+        if f in excluded:
+            continue
+        full = os.path.join(folder_path, f)
+        if os.path.isdir(full):
+            for subfile in os.listdir(full):
+                if subfile.endswith(".mp4"):
+                    old = os.path.join(full, subfile)
+                    new = os.path.join(folder_path, subfile)
+                    os.rename(old, new)
+                    print(f"moved: {subfile}")
+
     for filename in os.listdir(folder_path):
-        if filename.endswith(".mp4"):
+        match = re.search(r"([A-Za-z]+-\d+)_", filename)
+        if filename.endswith(".mp4") and not match:
             match = re.search(r"([A-Za-z]+-\d+)", filename)
             if match:
                 code = match.group(1)
@@ -70,9 +84,31 @@ def getDesc(folder_path):
                 print(f"No valid code found in {filename}")
 
 
+def format(folder_path):
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".mp4"):
+            match = re.search(r"([A-Za-z]+-\d+)", filename)
+            if match:
+                code = match.group(1)
+                if code == code.upper():
+                    continue
+                new_filename = filename.replace(code, code.upper())
+                old_path = os.path.join(folder_path, filename)
+                new_path = os.path.join(folder_path, new_filename)
+                os.rename(old_path, new_path)
+                print(f"Renamed: {filename} -> {new_filename}")
+            else:
+                print(f"No valid code found in {filename}")
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         folder_path = sys.argv[1]
-        getDesc(folder_path)
+        param = sys.argv[2]
+        print(f"param={param}")
+        if param == "format":
+            format(folder_path)
+        elif param == "desc":
+            getDesc(folder_path)
     else:
         main()
