@@ -102,7 +102,7 @@ def format(folder_path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         folder_path = sys.argv[1]
         param = sys.argv[2]
         print(f"param={param}")
@@ -110,5 +110,9 @@ if __name__ == "__main__":
             format(folder_path)
         elif param == "desc":
             getDesc(folder_path)
+    elif len(sys.argv) == 2:
+        folder_path = sys.argv[1]
+        getDesc(folder_path)
+        format(folder_path)
     else:
         main()

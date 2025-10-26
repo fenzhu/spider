@@ -43,14 +43,17 @@ def getPage(page):
     if res.status_code == 200:
         html = BeautifulSoup(res.text, "html.parser")
         targets = html.find_all(class_="tal")
+        # print(targets)
         for target in targets:
             urls = target.find_all("a")
+            # print(urls)
             for url in urls:
                 href = url["href"]
                 m = month if month >= 10 else "0{0}".format(month)
-                m = "07"
+                # m = "07"
                 y = year % 100
-                start = "htm_data/{0}{1}".format(y, m)
+                start = "/htm_data/{0}{1}".format(y, m)
+                print(href, start)
                 if href.startswith(start):
                     validHrefs.append(href)
 
